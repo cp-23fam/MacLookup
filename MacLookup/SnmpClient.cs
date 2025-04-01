@@ -14,12 +14,12 @@ namespace MacLookup
     class SnmpClient
     {
         IPAddress ipAddress;
-        IAuthenticationProvider authProvider;
+        IAuthenticationProvider? authProvider;
         string username;
 
         public SnmpClient(string ip, string username, string pwd, AuthProvider.Types type)
         {
-            IPAddress.TryParse(ip, out ipAddress);
+            ipAddress = IPAddress.Parse(ip);
             this.username = username;
             authProvider = AuthProvider.Get(type, pwd);
         }

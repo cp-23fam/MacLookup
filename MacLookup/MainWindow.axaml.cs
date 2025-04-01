@@ -7,7 +7,7 @@ namespace MacLookup;
 
 public partial class MainWindow : Window
 {
-    SnmpClient snmpClient;
+    SnmpClient? snmpClient;
 
     public List<Switch> Switches =
             [
@@ -38,12 +38,19 @@ public partial class MainWindow : Window
     public void LookupMacAddress(object? sender, RoutedEventArgs args)
     {
         CurrentSwitch = ClassSelectionField.SelectedIndex;
+        ErrorField.Text = null;
 
         while (true)
         {
             snmpClient = new SnmpClient(Switches[CurrentSwitch].Ip, "guest", "Pa$$w0rd", Switches[CurrentSwitch].ConnexionType);
 
-            string mac = CheckMacAddress(MacAddressField.Text.Trim());
+            string? mac = CheckMacAddress(MacAddressField.Text?.Trim());
+            if (mac == null)
+            {
+                ErrorField.Text = "Please enter a valid MAC address";
+                return;
+            }
+
             int? port = snmpClient.getPortFromMac(mac);
 
             if (port != null && Switches[CurrentSwitch].ConnexionPorts.Contains((int)port))
@@ -121,8 +128,10 @@ public partial class MainWindow : Window
 
     }
 
-    private string? CheckMacAddress(string mac)
+    private string? CheckMacAddress(string? mac)
     {
+        if (mac == null) return null;
+
         string[] separator = [":", "-", " "];
 
         for (int i = 0; i < separator.Length; i++)
