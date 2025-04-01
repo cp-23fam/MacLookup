@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		Width="800" Height="450"
+        Width="800" Height="450"
         x:Class="MacLookup.MainWindow"
         Title="MacLookup"
         Background="#F5F5F5">
@@ -23,14 +23,20 @@
                  BorderThickness="1"
                  Padding="10"/>
 
+		<TextBlock x:Name="ErrorField"
+                   FontSize="14"
+                   Foreground="Red"
+                   HorizontalAlignment="Center"
+                   Margin="5,0,5,0"/>
+
 		<ComboBox x:Name="ClassSelectionField"
-			Width="200" SelectedIndex="6"
-          Background="White"
-          BorderBrush="#007BFF"
-          BorderThickness="2"
-          Padding="5"
-          CornerRadius="5"
-          HorizontalAlignment="Center">
+                  Width="200" SelectedIndex="6"
+                  Background="White"
+                  BorderBrush="#007BFF"
+                  BorderThickness="2"
+                  Padding="5"
+                  CornerRadius="5"
+                  HorizontalAlignment="Center">
 
 			<ComboBoxItem>BD12</ComboBoxItem>
 			<ComboBoxItem>BD18</ComboBoxItem>
@@ -58,9 +64,12 @@
                 BorderBrush="#007BFF"
                 BorderThickness="1"
                 CornerRadius="5"
-				x:Name="LookupButton"/>
+                x:Name="LookupButton"/>
 
-		<TextBlock Name="Result" FontSize="16" Foreground="#555555" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-
+		<TextBlock Name="Result"
+                   FontSize="16"
+                   Foreground="#555555"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,0"/>
 	</StackPanel>
 </Window>
