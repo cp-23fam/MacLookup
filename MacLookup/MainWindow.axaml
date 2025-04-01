@@ -12,22 +12,32 @@
 
 		<TextBlock Text="Enter a MAC address:" FontSize="18" FontWeight="Bold" Foreground="#333333"/>
 
-		<TextBox x:Name="MacAddressField"
-                 Width="300"
-                 FontSize="16"
-                 VerticalAlignment="Center"
-                 HorizontalAlignment="Center"
-                 Watermark="10:0D:7F:6D:0E:B5"
-                 Background="#FFFFFF"
-                 BorderBrush="#CCCCCC"
-                 BorderThickness="1"
-                 Padding="10"/>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+			<TextBox x:Name="MacAddressField"
+                     Width="300"
+                     FontSize="16"
+                     Watermark="10:0D:7F:6D:0E:B5"
+                     Background="#FFFFFF"
+                     BorderBrush="#CCCCCC"
+                     BorderThickness="1"
+                     Padding="10"/>
+
+			<Button Content="?"
+                    FontSize="14"
+                    Width="25" Height="25"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="Blue"
+                    ToolTip.Tip="Enter the MAC address of the problematic machine"/>
+		</StackPanel>
 
 		<TextBlock x:Name="ErrorField"
                    FontSize="14"
                    Foreground="Red"
                    HorizontalAlignment="Center"
                    Margin="5,0,5,0"/>
+
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
 
 		<ComboBox x:Name="ClassSelectionField"
                   Width="200" SelectedIndex="6"
@@ -53,6 +63,17 @@
 			<ComboBoxItem>BE27</ComboBoxItem>
 
 		</ComboBox>
+
+		<Button Content="?"
+                    FontSize="14"
+                    Width="25" Height="25"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="Blue"
+                    ToolTip.Tip="Enter the classroom where the victim computer is"/>
+
+		</StackPanel>
+
 
 		<Button Content="Lookup"
                 Width="150"
