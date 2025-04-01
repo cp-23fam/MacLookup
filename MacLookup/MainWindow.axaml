@@ -21,10 +21,10 @@
                  Background="#FFFFFF"
                  BorderBrush="#CCCCCC"
                  BorderThickness="1"
-				 Text="10:0D:7F:6D:0E:B5"
                  Padding="10"/>
 
-		<ComboBox Width="200" SelectedIndex="6"
+		<ComboBox x:Name="ClassSelectionField"
+			Width="200" SelectedIndex="6"
           Background="White"
           BorderBrush="#007BFF"
           BorderThickness="2"

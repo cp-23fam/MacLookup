@@ -12,12 +12,14 @@ namespace MacLookup
         public string Ip;
         public int[] ConnexionPorts;
         public AuthProvider.Types ConnexionType;
+        public string Name;
 
-        public Switch(string ip, int[] connexionPorts, AuthProvider.Types type)
+        public Switch(string ip, int[] connexionPorts, AuthProvider.Types type, string name)
         {
             Ip = ip;
             ConnexionPorts = connexionPorts;
             ConnexionType = type;
+            Name = name;
         }
     };
 
