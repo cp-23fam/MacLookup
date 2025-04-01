@@ -7,15 +7,18 @@ using System.Threading.Tasks;
 
 namespace MacLookup
 {
-    class Switch
+    public class Switch
     {
-        public string Name;
-        public IPAddress Ip;
-        public string MacAddress;
+        public string Ip;
+        public int[] ConnexionPorts;
+        public AuthProvider.Types ConnexionType;
 
-        public void GetPortsInfos()
+        public Switch(string ip, int[] connexionPorts, AuthProvider.Types type)
         {
-
+            Ip = ip;
+            ConnexionPorts = connexionPorts;
+            ConnexionType = type;
         }
-    }
+    };
+
 }

@@ -22,8 +22,6 @@ namespace MacLookup
             IPAddress.TryParse(ip, out ipAddress);
             this.username = username;
             authProvider = AuthProvider.Get(type, pwd);
-
-            getPortFromMac("10:0D:7F:6D:0E:B5");
         }
 
         private List<Variable> Walk(string path)
@@ -51,7 +49,7 @@ namespace MacLookup
         {
             var mac = macString.ToUpper();
 
-            string path = "1.0.8802.1.1.2.1.4.1.1";
+            string path = "1.3.6.1.2.1.17.7.1.2.2.1.2.1";
 
             var result = Walk(path);
             int index = ObjectIdentifier.Convert(path).Length;
@@ -59,30 +57,23 @@ namespace MacLookup
             foreach (var r in result)
             {
                 var oid = r.Id.ToNumerical();
-                var id = (int)oid[index + 2];
 
-                int integerValue = 0;
-                string? stringValue = r.Data.ToString();
-                OctetString? octetValue = null;
-                switch (r.Data.TypeCode)
+                string treatedMac = "";
+                for (int i = 0; i < oid.Length - index; i++)
                 {
-                    case SnmpType.Integer32:
-                        integerValue = (r.Data as Integer32).ToInt32();
-                        break;
-                    case SnmpType.OctetString:
-                        octetValue = r.Data as OctetString;
-                        break;
-                }
-
-                if (oid[index] == 5)
-                {
-                    var b = octetValue.GetRaw();
-
-                    if ($"{b[0]:X2}:{b[1]:X2}:{b[2]:X2}:{b[3]:X2}:{b[4]:X2}:{b[5]:X2}" == mac)
+                    string part = oid[index + i].ToString("X");
+                    if (part.Length < 2)
                     {
-                        Console.WriteLine($"Same mac! : {id}");
-                        return id;
+                        part = "0" + part;
                     }
+
+                    treatedMac += part + ":";
+                }
+                treatedMac = treatedMac.Substring(0, treatedMac.Length - 1);
+
+                if (mac == treatedMac)
+                {
+                    return int.Parse(r.Data.ToString());
                 }
             }
 

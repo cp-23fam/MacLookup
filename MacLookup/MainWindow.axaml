@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		Width="800" Height="450"
         x:Class="MacLookup.MainWindow"
         Title="MacLookup"
         Background="#F5F5F5">
@@ -11,18 +12,19 @@
 
 		<TextBlock Text="Enter a MAC address:" FontSize="18" FontWeight="Bold" Foreground="#333333"/>
 
-		<TextBox Name="MacAddress"
+		<TextBox x:Name="MacAddressField"
                  Width="300"
                  FontSize="16"
                  VerticalAlignment="Center"
                  HorizontalAlignment="Center"
-                 Watermark="e.g., 00:14:22:01:23:45"
+                 Watermark="10:0D:7F:6D:0E:B5"
                  Background="#FFFFFF"
                  BorderBrush="#CCCCCC"
                  BorderThickness="1"
+				 Text="10:0D:7F:6D:0E:B5"
                  Padding="10"/>
 
-		<Button Command="" Content="Lookup"
+		<Button Content="Lookup"
                 Width="150"
                 FontSize="16"
                 Background="#007BFF"
@@ -31,8 +33,8 @@
                 Padding="10,5"
                 BorderBrush="#007BFF"
                 BorderThickness="1"
-                CornerRadius="5">
-		</Button>
+                CornerRadius="5"
+				x:Name="LookupButton"/>
 
 		<TextBlock Name="Result" FontSize="16" Foreground="#555555" HorizontalAlignment="Center" Margin="0,10,0,0"/>
 

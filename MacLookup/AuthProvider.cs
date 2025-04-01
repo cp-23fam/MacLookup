@@ -8,7 +8,7 @@ using Lextm.SharpSnmpLib;
 
 namespace MacLookup
 {
-    class AuthProvider
+    public class AuthProvider
     {
         public enum Types { MD5, SHA1, SHA256, SHA384, SHA512 }
         static public IAuthenticationProvider? Get(Types authType, string pwd)
