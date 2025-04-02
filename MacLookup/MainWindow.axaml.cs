@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
@@ -12,20 +16,20 @@ public partial class MainWindow : Window
     public List<Switch> Switches =
             [
                 new Switch("157.26.120.12", [50], AuthProvider.Types.SHA1, "BD12"),
-                new Switch("157.26.120.2", [49, 50], AuthProvider.Types.SHA1, "BD18"),
-                new Switch("157.26.120.3", [50], AuthProvider.Types.SHA1, "BD21"),
-                new Switch("157.26.120.4", [49, 50], AuthProvider.Types.SHA1, "BD24"),
-                new Switch("157.26.120.5", [50], AuthProvider.Types.SHA1, "BD52"),
-                new Switch("157.26.120.6", [50], AuthProvider.Types.SHA1, "BD53"),
-                new Switch("157.26.120.1", [13, 14, 15, 16, 17, 18, 19, 20, 21, 22], AuthProvider.Types.SHA512, "BD59-01"),
-                new Switch("157.26.120.11", [24], AuthProvider.Types.SHA1, "BD59-02"),
-                new Switch("157.26.120.7", [50], AuthProvider.Types.SHA1, "BD77-01"),
-                new Switch("157.26.120.8", [26], AuthProvider.Types.SHA1, "BD77-02"),
-                new Switch("157.26.120.9", [50], AuthProvider.Types.SHA1, "BD83"),
-                new Switch("157.26.120.10", [50], AuthProvider.Types.SHA1, "BD86"),
-                new Switch("157.26.120.47", [50], AuthProvider.Types.SHA1, "BE27"),
-                //new Switch("157.26.120.13", [50], AuthProvider.Types.SHA1),
-            ];
+                                new Switch("157.26.120.2", [49, 50], AuthProvider.Types.SHA1, "BD18"),
+                                new Switch("157.26.120.3", [50], AuthProvider.Types.SHA1, "BD21"),
+                                new Switch("157.26.120.4", [49, 50], AuthProvider.Types.SHA1, "BD24"),
+                                new Switch("157.26.120.5", [50], AuthProvider.Types.SHA1, "BD52"),
+                                new Switch("157.26.120.6", [50], AuthProvider.Types.SHA1, "BD53"),
+                                new Switch("157.26.120.1", [13, 14, 15, 16, 17, 18, 19, 20, 21, 22], AuthProvider.Types.SHA512, "BD59-01"),
+                                new Switch("157.26.120.11", [24], AuthProvider.Types.SHA1, "BD59-02"),
+                                new Switch("157.26.120.7", [50], AuthProvider.Types.SHA1, "BD77-01"),
+                                new Switch("157.26.120.8", [26], AuthProvider.Types.SHA1, "BD77-02"),
+                                new Switch("157.26.120.9", [50], AuthProvider.Types.SHA1, "BD83"),
+                                new Switch("157.26.120.10", [50], AuthProvider.Types.SHA1, "BD86"),
+                                new Switch("157.26.120.47", [50], AuthProvider.Types.SHA1, "BE27"),
+                                //new Switch("157.26.120.13", [50], AuthProvider.Types.SHA1),
+                            ];
 
     int CurrentSwitch = 6;
 
@@ -35,10 +39,11 @@ public partial class MainWindow : Window
         LookupButton.Click += LookupMacAddress;
     }
 
-    public void LookupMacAddress(object? sender, RoutedEventArgs args)
+    public async void LookupMacAddress(object? sender, RoutedEventArgs args)
     {
         CurrentSwitch = ClassSelectionField.SelectedIndex;
         ErrorField.Text = null;
+        CompanyNameField.Text = null;
 
         while (true)
         {
@@ -59,7 +64,8 @@ public partial class MainWindow : Window
                 {
                     CurrentSwitch = 6;
                     continue;
-                } else
+                }
+                else
                 {
                     if (CurrentSwitch == 6)
                     {
@@ -104,17 +110,20 @@ public partial class MainWindow : Window
                     {
                         CurrentSwitch++;
                         continue;
-                    } else if ( CurrentSwitch == 1)
+                    }
+                    else if (CurrentSwitch == 1)
                     {
                         if (port == 49) CurrentSwitch = 0;
                         else CurrentSwitch = 6;
                         continue;
-                    } else if (CurrentSwitch == 3)
+                    }
+                    else if (CurrentSwitch == 3)
                     {
                         if (port == 49) CurrentSwitch = 12;
                         else CurrentSwitch = 6;
                         continue;
-                    } else if (CurrentSwitch == 12)
+                    }
+                    else if (CurrentSwitch == 12)
                     {
                         CurrentSwitch = 3;
                         continue;
@@ -123,6 +132,7 @@ public partial class MainWindow : Window
             }
 
             Result.Text = Switches[CurrentSwitch].Name + " - Port: " + port.ToString();
+            GetMacAddressCompany(mac);
             break;
         }
 
@@ -147,4 +157,37 @@ public partial class MainWindow : Window
 
         return null;
     }
+
+    private async void GetMacAddressCompany(string mac)
+    {
+        string url = $"https://api.maclookup.app/v2/macs/{mac}";
+
+        using HttpClient client = new HttpClient();
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            var data = JsonSerializer.Deserialize<MacLookupResponse>(responseBody, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            string macAddressCompany = data?.Company ?? "Not Found";
+
+            CompanyNameField.Text = "Mac Address Company: " + macAddressCompany;
+        }
+        catch (HttpRequestException)
+        {
+            CompanyNameField.Text = "Mac Address Company: Not Found";
+        }
+    }
+    public class MacLookupResponse
+    {
+        public string Company { get; set; }
+    }
+
 }
