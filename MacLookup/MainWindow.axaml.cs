@@ -32,6 +32,7 @@ public partial class MainWindow : Window
 
     int CurrentSwitch = 6;
     bool preventLoop = false;
+    int nullCounter = 0;
 
     public MainWindow()
     {
@@ -128,13 +129,21 @@ public partial class MainWindow : Window
                 }
             } else if (port == null)
             {
+                if (nullCounter >= 20)
+                {
+                    Result.Text = Switches[CurrentSwitch].Name + " - Port: Inconnu";
+                    nullCounter = 0;
+                    break;
+                }
+
+                nullCounter++;
                 CurrentSwitch++;
                 if (CurrentSwitch >= Switches.Count)
                 {
                     CurrentSwitch = 0;
                     if (preventLoop)
                     {
-
+                        nullCounter = 0;
                         Result.Text = "Aucune machine trouvée";
                         break;
                     }
@@ -190,13 +199,13 @@ public partial class MainWindow : Window
                 PropertyNameCaseInsensitive = true
             });
 
-            string macAddressCompany = data?.Company ?? "Not Found";
+            string macAddressCompany = data?.Company ?? "Unknown";
 
             CompanyNameField.Text = "Mac Address Company: " + macAddressCompany;
         }
         catch (HttpRequestException)
         {
-            CompanyNameField.Text = "Mac Address Company: Not Found";
+            CompanyNameField.Text = "Error Using the API";
         }
     }
     public class MacLookupResponse
